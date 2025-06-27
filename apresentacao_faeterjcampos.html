@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slides: Gestão Portuária FAETERJ Campos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Porto Sereno (Neutros quentes, azul tecnológico, e um toque de areia/dourado) -->
+    <!-- Application Structure Plan: Cada "slide" é uma seção HTML distinta, agora posicionada absolutamente para sobreposição. A navegação entre slides é controlada por botões "Próximo" e "Anterior" via JavaScript, manipulando a opacidade e visibilidade. A estrutura linear é ideal para apresentações passo a passo, garantindo que o público absorva a informação em uma ordem definida. -->
+    <!-- Visualization & Content Choices: 1. Perfil do Egresso (Gerenciar/Inventariar/Administrar): Goal=Organizar, Method=Texto resumido em slides dedicados. 2. Estrutura Curricular: Goal=Informar/Comparar, Method=Gráfico de Donut (Chart.js/Canvas) em um slide próprio para clareza da distribuição da carga horária. 3. Certificações Intermediárias: Goal=Informar, Method=Lista de pontos chave para destacar valor. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        /* Garantindo que html e body preencham a tela para 100vh funcionar */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Evita rolagem, essencial para slide show */
+        }
+        
+        /* Container para os slides posicionados absolutamente */
+        .slides-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute; /* Para que os slides se sobreponham */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex; /* Mantém o flexbox para centralização de conteúdo */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 2rem;
+            box-sizing: border-box;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-900 */
+            opacity: 0; /* Começa invisível */
+            visibility: hidden; /* Esconde do leitor de tela e eventos de clique */
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Transição suave */
+            z-index: 0; /* Slides inativos ficam atrás */
+        }
+        .slide.active {
+            opacity: 1; /* Torna visível */
+            visibility: visible; /* Torna clicável e acessível */
+            z-index: 10; /* Traz o slide ativo para a frente */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 80%; /* Ajusta para o espaço do slide */
+            max-width: 600px; /* Largura máxima para o gráfico */
+            max-height: 500px;
+            margin: 0 auto;
+        }
+        .navigation-buttons {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100; /* Garante que os botões fiquem acima dos slides */
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <div class="slides-wrapper">
+        <!-- Slide 1: Título -->
+        <div id="slide1" class="slide active bg-sky-800 text-white">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+                Curso Superior de Tecnologia em Gestão Portuária
+            </h1>
+            <p class="text-2xl md:text-4xl text-sky-200 mb-8">
+                FAETERJ Campos: Formando os Líderes do Futuro Portuário
+            </p>
+            <div class="text-sky-100 mt-12 text-center">
+                <p class="text-lg">Pronto para Mover o Brasil?</p>
+                <p class="text-lg">Prepare-se para o Mercado Global!</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Sobre a Instituição -->
+        <div id="slide2" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Sobre a FAETERJ Campos</h2>
+                <p class="text-xl text-slate-700 leading-relaxed">
+                    A FAETERJ Campos é parte da renomada Fundação de Apoio à Escola Técnica (FAETEC), que promove a Educação Profissional e Tecnológica pública e gratuita no Estado do Rio de Janeiro.
+                </p>
+                <p class="mt-4 text-xl text-slate-700 leading-relaxed">
+                    Comprometida com a inovação, preparamos profissionais altamente qualificados para atender às demandas dinâmicas do mercado, impulsionando o desenvolvimento regional.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: O Curso: Dados Gerais -->
+        <div id="slide3" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-8">O Curso: Dados Essenciais</h2>
+                <ul class="list-disc list-inside text-left text-xl text-slate-700 space-y-4 mx-auto w-fit">
+                    <li>Denominação: Tecnólogo em Gestão Portuária</li>
+                    <li>Local: Campos dos Goytacazes, RJ</li>
+                    <li>Modalidade: Tecnologia (Ensino Superior)</li>
+                    <li>Vagas Anuais: 160 (80 por semestre)</li>
+                    <li>Turnos: Manhã e Noite</li>
+                    <li>Duração Mínima: 2 anos (4 períodos)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Objetivo Geral -->
+        <div id="slide4" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Objetivo Geral do Curso</h2>
+                <p class="text-xl text-slate-700 leading-relaxed">
+                    Formar Tecnólogos em Gestão Portuária capazes de inovar e otimizar processos logísticos em portos marítimos e fluviais.
+                </p>
+                <p class="mt-4 text-xl text-slate-700 leading-relaxed">
+                    O curso capacita para a resolução de problemas, minimizando custos e maximizando benefícios da atividade portuária, sempre com ética e sustentabilidade.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Perfil do Egresso -->
+        <div id="slide5" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Perfil do Egresso: Profissionais Completos</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    O Tecnólogo em Gestão Portuária estará apto a atuar em diversas frentes, com foco em:
+                </p>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Planejar e Coordenar</h3>
+                        <p class="text-slate-600">Movimentação, fluxo de informações, otimização de equipamentos e necessidades intermodais.</p>
+                    </div>
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Gerenciar Diversos Aspectos</h3>
+                        <p class="text-slate-600">Transporte, armazenagem, fretes, transbordos, tráfego de navios, projetos ambientais e RH.</p>
+                    </div>
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Administrar e Periciar</h3>
+                        <p class="text-slate-600">Funções estratégicas, administrativas, operacionais e emissão de laudos técnicos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Habilidades e Competências - Gerenciar -->
+        <div id="slide6" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Pilar de Competências: Gerenciar</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    Desenvolvimento de habilidades essenciais para liderança e eficiência:
+                </p>
+                <ul class="list-disc list-inside text-left text-xl text-slate-700 space-y-3 mx-auto w-fit">
+                    <li>Raciocínio lógico e matemática financeira</li>
+                    <li>Conceitos de tecnologia e gestão de pessoas</li>
+                    <li>Gestão da qualidade e resolução de conflitos</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Habilidades e Competências - Inventariar -->
+        <div id="slide7" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Pilar de Competências: Inventariar</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    Domínio sobre a cadeia de suprimentos e processos aduaneiros:
+                </p>
+                <ul class="list-disc list-inside text-left text-xl text-slate-700 space-y-3 mx-auto w-fit">
+                    <li>Logística e Supply Chain</li>
+                    <li>Processo de exportação e legislação aduaneira</li>
+                    <li>Custos logísticos, transportes modais e planejamento de estoque</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Habilidades e Competências - Administrar -->
+        <div id="slide8" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Pilar de Competências: Administrar</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    Capacidade para gerenciar operações portuárias complexas:
+                </p>
+                <ul class="list-disc list-inside text-left text-xl text-slate-700 space-y-3 mx-auto w-fit">
+                    <li>Comércio exterior e seus custos</li>
+                    <li>Legislação de exportação</li>
+                    <li>Planejamento e operação de terminais portuários</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Certificações Intermediárias -->
+        <div id="slide9" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Certificações Profissionais Intermediárias</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    Valorizamos sua empregabilidade desde cedo, com reconhecimento de habilidades ao longo do curso:
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-amber-100 p-6 rounded-lg shadow-md text-amber-800">
+                        <h3 class="text-2xl font-semibold mb-2">Operador de Transportes Modais</h3>
+                        <p class="text-lg">Adquirido no 2º período, foca em liderança, otimização do tempo e gestão de cadeia de suprimentos.</p>
+                    </div>
+                    <div class="bg-amber-100 p-6 rounded-lg shadow-md text-amber-800">
+                        <h3 class="text-2xl font-semibold mb-2">Coordenador de Operações Portuárias</h3>
+                        <p class="text-lg">Alcançado no 4º período, desenvolve capacidade de resolução de conflitos e gestão de equipes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Estrutura Curricular (Gráfico) -->
+        <div id="slide10" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-8">Estrutura Curricular Balanceada</h2>
+                <div class="chart-container">
+                    <canvas id="courseStructureChart"></canvas>
+                </div>
+                <p class="mt-8 text-lg text-slate-700">
+                    Total de <span class="font-bold text-sky-800">1730 horas</span> cuidadosamente distribuídas para uma formação completa.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Atividades Extensionistas -->
+        <div id="slide11" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-6">Atividades Extensionistas</h2>
+                <p class="text-xl text-slate-700 mb-8 leading-relaxed">
+                    A aplicação prática do conhecimento é incentivada através de projetos que promovem impacto social:
+                </p>
+                <ul class="list-disc list-inside text-left text-xl text-slate-700 space-y-3 mx-auto w-fit">
+                    <li>Participação obrigatória (10% da carga horária)</li>
+                    <li>Disciplinas focadas: Logística Reversa, Energias Alternativas, Logística Internacional.</li>
+                    <li>Conecta o aprendizado às demandas da comunidade e do setor.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Diferenciais do Curso -->
+        <div id="slide12" class="slide">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-sky-800 mb-8">Nossos Diferenciais</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Corpo Docente Qualificado</h3>
+                        <p class="text-slate-600">Mestres e doutores com experiência de mercado que conectam teoria e prática.</p>
+                    </div>
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Estrutura e Tecnologia</h3>
+                        <p class="text-slate-600">Laboratórios modernos e acesso a vasta biblioteca virtual (Pearson Higher Education).</p>
+                    </div>
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Flexibilidade de Horários</h3>
+                        <p class="text-slate-600">Turnos matutino e noturno para conciliar estudos e atividades profissionais.</p>
+                    </div>
+                    <div class="bg-sky-100 p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold text-sky-800 mb-2">Inovação e Empregabilidade</h3>
+                        <p class="text-slate-600">Foco em formar profissionais preparados para as inovações e desafios do mercado de trabalho.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Por Que Parceriar -->
+        <div id="slide13" class="slide bg-sky-800 text-white">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-6">Por que ter uma parceria com a FAETERJ Campos?</h2>
+                <ul class="list-disc list-inside text-left text-xl text-sky-100 space-y-4 mx-auto w-fit">
+                    <li>Acesso a Talentos: Recrute profissionais qualificados e atualizados.</li>
+                    <li>Inovação e Pesquisa: Colabore em projetos para desafios reais da sua empresa.</li>
+                    <li>Capacitação Personalizada: Desenvolva treinamentos com nosso apoio acadêmico.</li>
+                    <li>Desenvolvimento Regional: Invista no futuro do setor portuário em nossa região.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Chamada à Ação Final -->
+        <div id="slide14" class="slide bg-amber-500 text-sky-900">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-6">Conecte-se Conosco!</h2>
+            <p class="text-2xl md:text-3xl mb-8">
+                Impulsione o futuro do seu negócio e do setor portuário.
+            </p>
+            <p class="text-xl md:text-2xl mb-4">
+                E-mail: direcao.faeterjcampos@desup.faetec.rj.gov.br
+            </p>
+            <p class="text-xl md:text-2xl">
+                Endereço: Av. Alberto Lamego, 712, Campos dos Goytacazes, RJ
+            </p>
+            <p class="text-xl md:text-2xl mt-8 font-bold">
+                Esperamos por você e sua empresa!
+            </p>
+        </div>
+    </div> <!-- Fim do slides-wrapper -->
+
+    <!-- Botões de Navegação -->
+    <div class="navigation-buttons">
+        <button id="prevBtn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-sky-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            Anterior
+        </button>
+        <button id="nextBtn" class="bg-sky-700 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-sky-800 transition-colors">
+            Próximo
+        </button>
+    </div>
+
+    <script>
+        // Variáveis globais para controle dos slides
+        let currentSlideIndex = 0;
+        let slides;
+        let prevBtn;
+        let nextBtn;
+
+        function showSlide(index) {
+            console.log('Exibindo slide:', index);
+            if (!slides || slides.length === 0) {
+                console.warn('Slides não encontrados ou vazios.');
+                return;
+            }
+
+            // Oculta todos os slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Exibe o slide atual
+            if (slides[index]) {
+                slides[index].classList.add('active');
+            } else {
+                console.error('Slide no índice', index, 'não encontrado.');
+            }
+            
+            // Habilita/desabilita botões
+            prevBtn.disabled = (index === 0);
+            nextBtn.disabled = (index === slides.length - 1);
+        }
+
+        function nextSlide() {
+            console.log('Botão Próximo clicado. Índice atual:', currentSlideIndex);
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                showSlide(currentSlideIndex);
+            }
+        }
+
+        function prevSlide() {
+            console.log('Botão Anterior clicado. Índice atual:', currentSlideIndex);
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                showSlide(currentSlideIndex);
+            }
+        }
+
+        // Aguarda o carregamento completo do DOM
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM totalmente carregado.');
+
+            slides = document.querySelectorAll('.slide');
+            prevBtn = document.getElementById('prevBtn');
+            nextBtn = document.getElementById('nextBtn');
+
+            if (slides.length === 0) {
+                console.error('Nenhum slide encontrado. Verifique os elementos com a classe "slide".');
+                return;
+            }
+            if (!prevBtn || !nextBtn) {
+                console.error('Botões de navegação não encontrados. Verifique os IDs "prevBtn" e "nextBtn".');
+                return;
+            }
+
+            // Adiciona listeners de evento aos botões
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            // Adiciona navegação pelo teclado
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (event.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+
+            // Inicializa o primeiro slide ao carregar a página
+            showSlide(currentSlideIndex);
+
+            // Configuração do gráfico Chart.js
+            const courseData = {
+                labels: ['Disciplinas Obrigatórias', 'Atividades Extensionistas', 'Disciplinas Eletivas', 'Atividades Científico-Culturais'],
+                data: [1530, 216, 100, 100],
+            };
+
+            const totalHours = courseData.data.reduce((a, b) => a + b, 0);
+
+            const ctx = document.getElementById('courseStructureChart');
+            if (ctx) { // Garante que o elemento canvas existe
+                const myChart = new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: courseData.labels,
+                        datasets: [{
+                            label: 'Carga Horária (horas)',
+                            data: courseData.data,
+                            backgroundColor: [
+                                '#0369a1', /* sky-700 */
+                                '#0ea5e9', /* sky-500 */
+                                '#7dd3fc', /* sky-300 */
+                                '#f59e0b'  /* amber-500 */
+                            ],
+                            borderColor: '#f8fafc', /* slate-50 */
+                            borderWidth: 4,
+                            hoverOffset: 16
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#475569', /* slate-600 */
+                                    font: {
+                                        size: 14,
+                                        family: 'Inter'
+                                    },
+                                    usePointStyle: true,
+                                    boxWidth: 10
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            const value = context.parsed;
+                                            const percentage = ((value / totalHours) * 100).toFixed(1);
+                                            label += `${value}h (${percentage}%)`;
+                                        }
+                                        return label;
+                                    }
+                                },
+                                bodyFont: { size: 14, family: 'Inter' },
+                                titleFont: { size: 16, family: 'Inter', weight: 'bold' }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
